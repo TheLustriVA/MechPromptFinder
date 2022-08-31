@@ -1,5 +1,6 @@
 import json
 from pprint import pprint
+from .routing import get_db_connection, get_db_pw
 
 with open("metadata_example.json", "r", encoding="utf-8") as f:
     payload = json.load(f)
@@ -16,6 +17,8 @@ losses_list = []
 status_list = []
 models_list = []
 batch_list = []
+
+
 
 for payload in main_payload:
     record_id = payload['uuid']
@@ -174,3 +177,4 @@ for payload in main_payload:
             json.dump(models_list[0], f, indent=4)
             json.dump(batch_list[0], f, indent=4)
             
+

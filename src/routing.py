@@ -2,6 +2,12 @@
 import json
 from pathlib import Path
 import dynamic_scrape as ds
+import sqlalchemy
+from sqlalchemy import create_engine
+import psycopg2
+from dotenv import load_dotenv
+import os
+
 
 
 def dir_tree(directory):
@@ -263,3 +269,15 @@ def remove_done_scrapes(scrape_path, target_list_file):
     with open(target_list_file, 'w') as f:
         json.dump(target_list, f)
     return None
+
+def get_db_pw():
+    load_dotenv()
+    POSTGRES_PW = os.getenv('POSTGRES_PW')
+    return POSTGRES_PW
+
+def get_db_connection(username, password, host, database):
+    """
+    Define a function that returns a connection to a database.
+    """
+    return create_engine(f"postgresql+psycopg2://{username}:{password}@{host}/{database}")
+
