@@ -135,3 +135,11 @@ metadata_cache.json
 metadata_example.json
 PromoArt/
 src/target_list.txt
+src/ai_art_prompts.json
+src/combined_FD.json
+src/dict_text.txt
+src/main_payload.json
+src/remove_done.ipynb
+src/target_list.json
+src/prototype.ipynb
+src/combined.json

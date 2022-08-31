@@ -65,7 +65,29 @@ def populate_target_archive(archive_dict:dict)->list:
                 f.write(target + "\n")
     return TARGET_LIST
 
-
+def update_target_list(driver_path, current_page:str, url_list:list)->list:
+    """
+    Define a function that takes in a diver, a current page, and a list of URLs. The function should:
+    1. It should create a webdriver called 'driver' and point it at the current page.
+    2. It should create a list of hrefs called 'new_urls' using the href_list function on driver.find_elements(By.XPATH, "//div/a[@href]")
+    3. The function should then call itself recursively until elements in the 'new_urls' list return true for the is_done function.
+    4. It should return the list of URLs.
+    """
+    options = webdriver.ChromeOptions()
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.headless = True
+    driver = webdriver.Chrome(driver_path + "chromedriver.exe", options=options)
+    driver.get(current_page)
+    time.sleep(10)
+    new_urls = href_list(driver.find_elements(By.XPATH, "//div/a[@href]"))
+    for url in new_urls:
+        if url not in url_list:
+            url_list.append(url)
+            driver.quit()
+            time.sleep(1)
+            update_target_list(driver_path, url, url_list)
+    return url_list
+    
 
 def url_to_json(url:str, driver:webdriver)->str:
     """
@@ -226,7 +248,7 @@ def scrape_piece(url:str, driver_path:str, mlva_uuid:uuid.uuid4)->str:
 
     time.sleep(5)
     driver.quit()
-    output_file = f"data/feverdream__scrape/{identifier[0]}.json"
+    output_file = f"data/feverdream_scrape/{identifier[0]}.json"
     with open(output_file, "w", encoding='utf-8') as f:
         json.dump(piece_cache, f, indent=4)
     return output_file
